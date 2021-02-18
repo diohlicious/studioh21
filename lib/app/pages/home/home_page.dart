@@ -58,9 +58,6 @@ class HomePage extends StatelessWidget {
             ));
           }
           return Scaffold(
-            appBar: AppBar(
-              title: Text(title),
-            ),
             drawer: Theme(
               data: Theme.of(context).copyWith(
                 canvasColor: Colors.purple[900],
