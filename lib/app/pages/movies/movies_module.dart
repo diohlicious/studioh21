@@ -10,7 +10,7 @@ class MoviesModule extends ChildModule {
 
   @override
   List<Bind> get binds => [
-    Bind((i) => MoviesBloc()),
+    Bind((i) => MoviesBloc(i.get())),
     Bind((i) => MoviesRepository()),
   ];
 
