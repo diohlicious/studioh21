@@ -1,6 +1,6 @@
 # studioh21
 
-studioh21 A new Flutter Moview application.
+studioh21 A new Flutter Movie application.
 
 ## Getting Started
 
