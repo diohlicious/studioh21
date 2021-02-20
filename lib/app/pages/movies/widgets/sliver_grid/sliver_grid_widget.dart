@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:studioh21/app/network/network_endpoints.dart';
 import 'package:studioh21/app/pages/movies/model/movies_model.dart';
+
+import '../../movies_bloc.dart';
 
 class SliverGridWidget extends StatelessWidget {
   final List<Result> result;
@@ -10,6 +13,7 @@ class SliverGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MoviesBloc bloc = Modular.get<MoviesBloc>();
     var gridItems = <Widget>[];
     for (var i = 0; i < result.length; i++) {
       var d = result[i];
@@ -27,84 +31,87 @@ class SliverGridWidget extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Container(
-              width: 170,
-              height: 170,
-              margin: EdgeInsets.fromLTRB(3, 6, 3, 0),
-              padding: EdgeInsets.only(bottom: 3.0),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(9),
-                  image: DecorationImage(
-                      fit: BoxFit.fitHeight,
-                      image: NetworkImage(
-                          '${NetworkEndpoints.IMAGE_URL}/${d.posterPath}'))),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(9),
-                              bottomRight: Radius.circular(9)),
-                          color: Colors.blue.withOpacity(0.5),
+            GestureDetector(
+              onTap: (){bloc.ok();},
+              child: Container(
+                width: 170,
+                height: 170,
+                margin: EdgeInsets.fromLTRB(3, 6, 3, 0),
+                padding: EdgeInsets.only(bottom: 3.0),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(9),
+                    image: DecorationImage(
+                        fit: BoxFit.fitHeight,
+                        image: NetworkImage(
+                            '${NetworkEndpoints.IMAGE_URL}/${d.posterPath}'))),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(9),
+                                bottomRight: Radius.circular(9)),
+                            color: Colors.blue.withOpacity(0.5),
+                          ),
+                          padding: EdgeInsets.all(3),
+                          child: Row(
+                            children: [
+                              Icon(
+                                CupertinoIcons.star_fill,
+                                color: Colors.white,
+                                size: 15,
+                              ),
+                              Text(
+                                d.voteAverage.toString(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Icon(
+                                CupertinoIcons.person_2_fill,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                              Text(
+                                d.voteCount.toString(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
                         ),
-                        padding: EdgeInsets.all(3),
-                        child: Row(
-                          children: [
-                            Icon(
-                              CupertinoIcons.star_fill,
-                              color: Colors.white,
-                              size: 15,
+                        Spacer()
+                      ],
+                    ),
+                    Spacer(),
+                    Container(
+                      color: Colors.white.withOpacity(0.5),
+                      child: Text(
+                        d.title,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          shadows: <Shadow>[
+                            Shadow(
+                              offset: Offset(1.0, 1.0),
+                              blurRadius: 3.0,
+                              color: Colors.grey,
                             ),
-                            Text(
-                              d.voteAverage.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              CupertinoIcons.person_2_fill,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                            Text(
-                              d.voteCount.toString(),
-                              style: TextStyle(color: Colors.white),
+                            Shadow(
+                              offset: Offset(1.0, 1.0),
+                              blurRadius: 8.0,
+                              color: Colors.black,
                             ),
                           ],
                         ),
                       ),
-                      Spacer()
-                    ],
-                  ),
-                  Spacer(),
-                  Container(
-                    color: Colors.white.withOpacity(0.5),
-                    child: Text(
-                      d.title,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        shadows: <Shadow>[
-                          Shadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 3.0,
-                            color: Colors.grey,
-                          ),
-                          Shadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 8.0,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Text(

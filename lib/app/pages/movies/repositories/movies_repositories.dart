@@ -8,9 +8,9 @@ import 'package:studioh21/app/utils/network_util.dart';
 
 class MoviesRepository extends Disposable{
 
-  Future<MoviesModel> fetchMovies() => NetworkUtil().get(
+  Future<MoviesModel> fetchMovies(int index) => NetworkUtil().get(
     // HTTP-GET request
-      url: NetworkEndpoints.BASE_API+'/movie/popular?language=en-US').then((dynamic response) {
+      url: '${NetworkEndpoints.BASE_API}/movie/popular?language=en-US&page=$index').then((dynamic response) {
     final resStr = jsonEncode(response);
     final Map parsed = jsonDecode(resStr);
     final detailModel = MoviesModel.fromJson(parsed);

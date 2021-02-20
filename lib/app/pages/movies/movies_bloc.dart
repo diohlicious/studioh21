@@ -9,11 +9,64 @@ class MoviesBloc extends Disposable{
   
   MoviesBloc(this.moviesRepository);
 
-  BehaviorSubject<MoviesModel> moviesModel$ = BehaviorSubject<MoviesModel>();
+  BehaviorSubject<List<Result>> moviesModel$ = BehaviorSubject<List<Result>>();
+
+  List<Result> _movieList = [];
+
+  List<Result> get movieList => _movieList;
+
+  set movieList(List<Result> val){
+    _movieList = val;
+    notifyListeners();
+  }
+
+  int _index = 0;
+
+  int get index => _index;
+
+  set index(int val){
+    _index = val;
+    notifyListeners();
+  }
+
+  bool _isLoading = true;
+
+  bool get isLoading => _isLoading;
+
+  set isLoading(bool val){
+    _isLoading = val;
+    notifyListeners();
+  }
+
+  setIsLoading(bool val){
+    _isLoading = val;
+    notifyListeners();
+  }
+
 
   Future fetchMovies() async {
-    moviesModel$.add(await moviesRepository.fetchMovies()) ;
+    movieList=[];
+    index = 1;
+    var _movies = await moviesRepository.fetchMovies(index);
+    movieList.addAll(_movies.results);
+    moviesModel$.add(movieList) ;
+  }
+
+  Future fetchMore() async{
+    if(isLoading) {
+        isLoading = false;
+        index += 1;
+        var _movies = await moviesRepository.fetchMovies(index);
+        movieList.addAll(_movies.results);
+        print('ok ini index ke $index');
+        moviesModel$.add(movieList);
+    }
+  }
+
+
+  Future ok() async{
     //print(tokenModel.requestToken);
+    print('ok');
   }
 
   @override
