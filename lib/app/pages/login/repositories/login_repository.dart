@@ -20,7 +20,7 @@ class LoginRepository extends Disposable{
     return tokenModel; // Map json response to TokenModel object
   });
 
-  Future<LoginModel> isAuthenticUser(String usernameStr, passStr, tokenStr) => NetworkUtil().post(
+  Future<LoginModel> isAuthenticUser(String usernameStr, passStr, tokenStr) => NetworkUtil().login(
     // HTTP-POST request
       url: NetworkEndpoints.LOGIN_API, // REST api URL
       body: {
@@ -37,7 +37,7 @@ class LoginRepository extends Disposable{
     return loginModel; // Map json response to UserModel object
   });
 
-  Future<NewSessionModel> newSession(String tokenStr) => NetworkUtil().post(
+  Future<NewSessionModel> newSession(String tokenStr) => NetworkUtil().login(
     // HTTP-POST request
       url: NetworkEndpoints.BASE_AUT+'/session/new', // REST api URL
       body: {

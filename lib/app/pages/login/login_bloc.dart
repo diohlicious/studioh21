@@ -52,6 +52,15 @@ class LoginBloc extends Disposable {
     notifyListeners();
   }
 
+  String _snackStr;
+
+  String get snackStr => _snackStr;
+
+  set snackStr(String val) {
+    _snackStr = val;
+    notifyListeners();
+  }
+
   Future login() async{
     final loginModel = await loginRepository.isAuthenticUser(txtUsername, txtPass, tokenModel.requestToken);
     if(loginModel.success){
@@ -59,7 +68,7 @@ class LoginBloc extends Disposable {
       //sessionIdStr = newSessionModel.sessionId;
       Modular.to.pushReplacementNamed('/home', arguments: newSessionModel.sessionId);
     } else {
-
+      snackStr = loginModel.statusMessage;
     }
   }
 

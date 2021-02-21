@@ -70,17 +70,26 @@ class NetworkUtil {
         // On response received
         // Get response status code
         final int statusCode = response.statusCode;
-
-        // Check response status code for error condition
-        //if (statusCode < 200 || statusCode > 400 || json == null) {
-          // Error occurred
-          //throw new Exception("Error while fetching data");
-        //} else {
-          // No error occurred
-          // Get response body
           final String res = response.body;
           // Convert response body to JSON object
           return _decoder.convert(res);
+        //}
+      });
+
+  Future<dynamic> login({@required String url, encoding, body}) =>
+      http
+          .post(url,
+          body: body,
+          headers: {"Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNmQ4NTE3ZDY5OGVhMzkxNDVjMzQ0ZjFmNGQ5YTg0MCIsInN1YiI6IjYwMmNlYTlmMmNkZTk4MDAzZTJkNGVmZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._eE_F-eromWapO0Dj7RATqVN5F81mL68kcsCdEXSU-4"
+          },
+          encoding: encoding) // Make HTTP-POST request
+          .then((http.Response response) {
+        // On response received
+        // Get response status code
+        final int statusCode = response.statusCode;
+        final String res = response.body;
+        // Convert response body to JSON object
+        return _decoder.convert(res);
         //}
       });
 }
