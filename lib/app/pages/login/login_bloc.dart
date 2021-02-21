@@ -1,6 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:studioh21/app/pages/login/repositories/login_repository.dart';
-import 'package:studioh21/app/repositories/function_repo.dart';
 
 import 'models/token_model.dart';
 
