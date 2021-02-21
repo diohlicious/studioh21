@@ -2,18 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:studioh21/app/network/network_endpoints.dart';
-import 'package:studioh21/app/pages/movies/model/movies_model.dart';
 
-import '../../movies_bloc.dart';
 
 class SliverGridWidget extends StatelessWidget {
-  final List<Result> result;
+  final List result;
+  final String type;
 
-  const SliverGridWidget({Key key, this.result}) : super(key: key);
+  const SliverGridWidget({Key key, this.result, this.type}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    MoviesBloc bloc = Modular.get<MoviesBloc>();
+    print(type);
     var gridItems = <Widget>[];
     for (var i = 0; i < result.length; i++) {
       var d = result[i];
@@ -32,7 +31,7 @@ class SliverGridWidget extends StatelessWidget {
         child: Column(
           children: [
             GestureDetector(
-              onTap: (){bloc.ok();},
+              onTap: (){Modular.to.pushNamed('/detail', arguments: {'id':d.id,'type':type}, );},
               child: Container(
                 width: 170,
                 height: 170,
@@ -47,50 +46,59 @@ class SliverGridWidget extends StatelessWidget {
                             '${NetworkEndpoints.IMAGE_URL}/${d.posterPath}'))),
                 child: Column(
                   children: [
-                    Row(
+                    Stack(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(9),
-                                bottomRight: Radius.circular(9)),
-                            color: Colors.blue.withOpacity(0.5),
-                          ),
-                          padding: EdgeInsets.all(3),
-                          child: Row(
-                            children: [
-                              Icon(
-                                CupertinoIcons.star_fill,
-                                color: Colors.white,
-                                size: 15,
-                              ),
-                              Text(
-                                d.voteAverage.toString(),
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Icon(
-                                CupertinoIcons.person_2_fill,
-                                color: Colors.white,
-                                size: 18,
-                              ),
-                              Text(
-                                d.voteCount.toString(),
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(icon: Icon(Icons.favorite_border, color: Colors.white), onPressed: (){})
+                          ],
                         ),
-                        Spacer()
-                      ],
-                    ),
+                        Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(9),
+                                  bottomRight: Radius.circular(9)),
+                              color: Colors.blue.withOpacity(0.5),
+                            ),
+                            padding: EdgeInsets.all(3),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  CupertinoIcons.star_fill,
+                                  color: Colors.white,
+                                  size: 15,
+                                ),
+                                Text(
+                                  d.voteAverage.toString(),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  CupertinoIcons.person_2_fill,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
+                                Text(
+                                  d.voteCount.toString(),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                        ],
+                      ),
+                    ]),
                     Spacer(),
                     Container(
                       color: Colors.white.withOpacity(0.5),
                       child: Text(
-                        d.title,
+                        '${type=='movie'?d.title:d.name}(${type=='movie'?d.releaseDate.year:d.firstAirDate.year})',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
