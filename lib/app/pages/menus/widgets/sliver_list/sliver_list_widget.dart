@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:studioh21/app/network/network_endpoints.dart';
+import 'package:studioh21/app/pages/home/models/json_data.dart';
 
 class SliverListWidget extends StatelessWidget {
   final List result;
-  final String type;
+  final JsonData map;
 
-  const SliverListWidget({Key key, this.result, this.type}) : super(key: key);
+  const SliverListWidget({Key key, this.result, this.map}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class SliverListWidget extends StatelessWidget {
       var d = result[i];
       listItems.add(
         GestureDetector(
-          onTap: (){Modular.to.pushNamed('/detail', arguments: {'id':d.id,'type':type}, );},
+          onTap: (){Modular.to.pushNamed('/detail', arguments: [map, d.id], );},
           child: Container(
             width: MediaQuery.of(context).size.width * 0.95,
             margin: EdgeInsets.fromLTRB(3, 5, 3, 0),
@@ -56,7 +57,7 @@ class SliverListWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${type=='movie'?d.title:d.name}(${type=='movie'?d.releaseDate.year:d.firstAirDate.year})',
+                        '${map.type=='movie'?d.title:d.name}(${map.type=='movie'?d.releaseDate.year:d.firstAirDate.year})',
                         style: TextStyle(color: Colors.blue[900],
                         fontWeight: FontWeight.bold),
                       ),

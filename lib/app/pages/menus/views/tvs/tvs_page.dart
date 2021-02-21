@@ -156,11 +156,11 @@ class _TvsPageState extends State<TvsPage> {
                   SliverVisibility(
                       visible: switchList,
                       sliver: SliverGridWidget(
-                          result: snapshot.data, type: widget.jsonData.type)),
+                          result: snapshot.data, map: widget.jsonData)),
                   SliverVisibility(
                       visible: !switchList,
                       sliver: SliverListWidget(
-                          result: snapshot.data, type: widget.jsonData.type)),
+                          result: snapshot.data, map: widget.jsonData)),
                   SliverToBoxAdapter(
                     child: Container(
                       height: bloc.isLoading ? 50.0 : 0,

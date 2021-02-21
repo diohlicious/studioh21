@@ -1,18 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:studioh21/app/network/network_endpoints.dart';
+import 'package:studioh21/app/pages/home/models/json_data.dart';
 
 
 class SliverGridWidget extends StatelessWidget {
   final List result;
-  final String type;
+  final JsonData map;
 
-  const SliverGridWidget({Key key, this.result, this.type}) : super(key: key);
+  const SliverGridWidget({Key key, this.result, this.map}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(type);
     var gridItems = <Widget>[];
     for (var i = 0; i < result.length; i++) {
       var d = result[i];
@@ -31,7 +33,7 @@ class SliverGridWidget extends StatelessWidget {
         child: Column(
           children: [
             GestureDetector(
-              onTap: (){Modular.to.pushNamed('/detail', arguments: {'id':d.id,'type':type}, );},
+              onTap: (){Modular.to.pushNamed('/detail', arguments: [map, d.id], );},
               child: Container(
                 width: 170,
                 height: 170,
@@ -46,14 +48,6 @@ class SliverGridWidget extends StatelessWidget {
                             '${NetworkEndpoints.IMAGE_URL}/${d.posterPath}'))),
                 child: Column(
                   children: [
-                    Stack(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(icon: Icon(Icons.favorite_border, color: Colors.white), onPressed: (){})
-                          ],
-                        ),
                         Row(
                         children: [
                           Container(
@@ -93,12 +87,11 @@ class SliverGridWidget extends StatelessWidget {
                           Spacer(),
                         ],
                       ),
-                    ]),
                     Spacer(),
                     Container(
                       color: Colors.white.withOpacity(0.5),
                       child: Text(
-                        '${type=='movie'?d.title:d.name}(${type=='movie'?d.releaseDate.year:d.firstAirDate.year})',
+                        '${map.type=='movie'?d.title:d.name}(${map.type=='movie'?d.releaseDate.year:d.firstAirDate.year})',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,

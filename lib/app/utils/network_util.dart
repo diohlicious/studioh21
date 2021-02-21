@@ -57,11 +57,14 @@ class NetworkUtil {
   ///        -> body -> dynamic
   ///        -> encoding -> dynamic
   ///  @usage -> Make HTTP-POST request to specified URL and returns the response in JSON format
-  Future<dynamic> post({@required String url, body, encoding}) =>
+  Future<dynamic> post({@required String url, encoding, body}) =>
       http
           .post(url,
               body: body,
-              headers: {"Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNmQ4NTE3ZDY5OGVhMzkxNDVjMzQ0ZjFmNGQ5YTg0MCIsInN1YiI6IjYwMmNlYTlmMmNkZTk4MDAzZTJkNGVmZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._eE_F-eromWapO0Dj7RATqVN5F81mL68kcsCdEXSU-4"},
+              headers: {
+                "content-type": "application/json",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNmQ4NTE3ZDY5OGVhMzkxNDVjMzQ0ZjFmNGQ5YTg0MCIsInN1YiI6IjYwMmNlYTlmMmNkZTk4MDAzZTJkNGVmZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._eE_F-eromWapO0Dj7RATqVN5F81mL68kcsCdEXSU-4"
+              },
               encoding: encoding) // Make HTTP-POST request
           .then((http.Response response) {
         // On response received
