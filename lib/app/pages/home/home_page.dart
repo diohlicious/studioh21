@@ -2,25 +2,51 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:studioh21/app/network/network_endpoints.dart';
-import 'package:studioh21/app/pages/movies/movies_module.dart';
+import 'package:studioh21/app/pages/menus/MoviesFavoriteMenu.dart';
+import 'package:studioh21/app/pages/menus/MoviesMenu.dart';
+import 'package:studioh21/app/pages/menus/TvsFavoriteMenu.dart';
+import 'package:studioh21/app/pages/menus/TvsMenu.dart';
 import 'home_bloc.dart';
 import 'models/detail_model.dart';
 import 'models/drawer_model.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final String title;
   final String sessionId;
 
   HomePage(this.sessionId, {Key key, this.title = 'Home'}) : super(key: key);
 
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  HomeBloc bloc;
+
+  @override
+  void initState() {
+    bloc = Modular.get<HomeBloc>();
+    bloc.fetchDetail(widget.sessionId).then((value) => bloc.fetchInfoMenu());
+    super.initState();
+  }
+
   final drawerItems = [
-    DrawerItem("Movies", CupertinoIcons.home),
+    DrawerItem("Movies", CupertinoIcons.arrowtriangle_right_square),
+    DrawerItem("Tvs", CupertinoIcons.tv_circle),
+    DrawerItem("Movies Favorite", CupertinoIcons.square_favorites_alt),
+    DrawerItem("Tvs Favorite", CupertinoIcons.square_favorites_alt_fill),
   ];
 
   _getDrawerItemWidget(int pos) {
     switch (pos) {
       case 0:
-        return RouterOutlet(module: MoviesModule());
+        return MoviesMenu(jsonData: bloc.movieJson);
+      case 1:
+        return TvsMenu(jsonData: bloc.tvJson,);
+      case 2:
+        return MoviesFavoriteMenu(jsonData: bloc.movieFavJson,);
+      case 3:
+        return TvsFavoriteMenu(jsonData: bloc.tvFavJson,);
       default:
         return Text('');
     }
@@ -28,8 +54,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HomeBloc bloc = Modular.get<HomeBloc>();
-    bloc.fetchDetail(sessionId);
+
     return StreamBuilder<DetailModel>(
         stream: bloc.detailModel$,
         builder: (context, snapshot) {
@@ -39,23 +64,24 @@ class HomePage extends StatelessWidget {
             );
           }
           var detailModel = snapshot.data;
+
           var drawerOptions = <Widget>[];
           for (var i = 0; i < drawerItems.length; i++) {
             var d = drawerItems[i];
-            drawerOptions.add(ListTile(
-              leading: Icon(d.icon),
-              title: Text(
-                d.title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+            drawerOptions.add(
+              ListTile(
+                leading: Icon(d.icon),
+                title: Text(
+                  d.title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+                selectedTileColor: Colors.blue[100].withOpacity(0.3),
+                selected: i == bloc.selectedDrawerIndex,
+                onTap: () => bloc.onSelectItem(i).then((value) => Navigator.of(context).pop()),//Modular.to.pop()),//
               ),
-              selectedTileColor: Colors.blue[100].withOpacity(0.3),
-              selected: i == bloc.selectedDrawerIndex,
-              onTap: () => bloc
-                  .onSelectItem(i)
-                  .then((value) => Navigator.of(context).pop()),
-            ));
+            );
           }
           return Scaffold(
             drawer: Theme(

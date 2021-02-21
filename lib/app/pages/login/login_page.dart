@@ -8,6 +8,8 @@ class LoginPage extends StatelessWidget {
     colors: <Color>[Colors.blue[900], Colors.red[900]],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 238.0, 0.0));
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     LoginBloc bloc = Modular.get<LoginBloc>();
@@ -21,6 +23,7 @@ class LoginPage extends StatelessWidget {
     );
 
     return Scaffold(
+      key: _scaffoldKey,
       body: Builder(
         builder: (context) => SingleChildScrollView(
           child: Container(
@@ -117,7 +120,13 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      bloc.login();
+                      bloc.login().
+                      whenComplete(() => _scaffoldKey.currentState.showSnackBar(
+                          SnackBar(
+                            content:
+                            Text(bloc.snackStr),
+                          )
+                      ));
                     }),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 18.0, horizontal: 0.0),
@@ -132,12 +141,30 @@ class LoginPage extends StatelessWidget {
                       alignment: Alignment.center,
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: Text(
-                        'SIGN UP',
+                        'GUEST',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    onPressed: () {}),
+                    onPressed: () {
+
+                    }),
                 //Text(bloc.tokenModel.requestToken)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      height: 120,
+                      width: 120,
+                      margin: EdgeInsets.fromLTRB(0.0, 20.0, 38.0, 0.0),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage('assets/popcorn.png'),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ],
             ),
           ),
